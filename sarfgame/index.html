@@ -6,10 +6,10 @@
 <style> <!-- https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css -->
 
 </style>
-<link
+<!-- <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+  /> -->
 <style>
     .ar {
         font-size: xxx-large;
@@ -122,7 +122,7 @@
   </script>
   
 
-  <section>
+  <!-- <section>
     <article>
       <H2>Sarf Game Instructions</H2>
       <ul>
@@ -132,7 +132,7 @@
         <li>Once you have mastered one, try the other Game modes.</li>
       </ul>
     </article>
-  </section>
+  </section> -->
 
 <input type="button" value="Start Game" @click="reset() || pick()"> 
 <i> Question {{ (questions.length -1) * 2 - questionsPool.length }} of {{ 2 * (questions.length - 1) }} </i>
@@ -158,7 +158,7 @@
     <article>SCORE: &nbsp; 
       <!-- <i> {{ questionsPool.length }} of {{ questions.length * 2 }} questions remain </i> -->
       <!-- <i> Question {{ questions.length * 2 - questionsPool.length }} of {{ 2 * (questions.length - 1) }} </i> -->
-        <div class=ar>{{ score ? score +' / '+ scoreOutOf : '-' }}</div>
+        <div class=ar>{{ scoreOutOf ? score +' / '+ scoreOutOf : '-' }}</div>
     </article>
 </section>
 
@@ -192,32 +192,34 @@ leave-active-class="animate__animated animate__fadeOutUp animate__delay-2s"
 </transition>
 
 
-
+<section><article>
+  <H2>Click the Conjugation below to which the above word belongs.</H2>
+</article></section>
 <table class=ar2>
   <thead>
     
   </thead>
   <tbody>
     <tr>
-      <td><button @click="guessed(13)" >{{ seg13 }}</button></td>
-      <td class=leftborder2><button @click="guessed(10)" >{{ seg10 }}</button></td>
-      <td><button @click="guessed(7)" >{{ seg7 }}</button></td>
-      <td class=leftborder><button @click="guessed(4)" >{{ seg4 }}</button></td>
-      <td><button @click="guessed(1)" >{{ seg1 }}</button></td>
+      <td><button @click="guessed(13)" >13:  {{ seg13 }}</button></td>
+      <td class=leftborder2><button @click="guessed(10)" >10:  {{ seg10 }}</button></td>
+      <td><button @click="guessed(7)" >7:  {{ seg7 }}</button></td>
+      <td class=leftborder><button @click="guessed(4)" >4:  {{ seg4 }}</button></td>
+      <td><button @click="guessed(1)" >1:  {{ seg1 }}</button></td>
     </tr>
     <tr>
-      <td><button @click="guessed(14)" >{{ seg14 }}</button></td>
-      <td class=leftborder2><button @click="guessed(11)" >{{ seg11 }}</button></td>
-      <td><button @click="guessed(8)" >{{ seg8 }}</button></td>
-      <td class=leftborder><button @click="guessed(5)" >{{ seg5 }}</button></td>
-      <td><button @click="guessed(2)" >{{ seg2 }}</button></td>
+      <td><button @click="guessed(14)" >14:  {{ seg14 }}</button></td>
+      <td class=leftborder2><button @click="guessed(11)" >11:  {{ seg11 }}</button></td>
+      <td><button @click="guessed(8)" >8:  {{ seg8 }}</button></td>
+      <td class=leftborder><button @click="guessed(5)" >5:  {{ seg5 }}</button></td>
+      <td><button @click="guessed(2)" >2:  {{ seg2 }}</button></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td class=leftborder2><button @click="guessed(12)" >{{ seg12 }}</button></td>
-      <td><button @click="guessed(9)" >{{ seg9 }}</button></td>
-      <td class=leftborder><button @click="guessed(6)" >{{ seg6 }}</button></td>
-      <td><button @click="guessed(3)" >{{ seg3 }}</button></td>
+      <td class=leftborder2><button @click="guessed(12)" >12:  {{ seg12 }}</button></td>
+      <td><button @click="guessed(9)" >9:  {{ seg9 }}</button></td>
+      <td class=leftborder><button @click="guessed(6)" >6:  {{ seg6 }}</button></td>
+      <td><button @click="guessed(3)" >3:  {{ seg3 }}</button></td>
     </tr>
   </tbody>
 </table>
@@ -275,6 +277,11 @@ leave-active-class="animate__animated animate__fadeOutUp animate__delay-2s"
 <script>
 
 var seghas = [null, "فَتَحَ", "فَتَحَا", "فَتَحُوْا", "فَتَحَتْ", "فَتَحَتَا", "فَتَحْنَ", "فَتَحْتَ", "فَتَحْتُمَا", "فَتَحْتُمْ", "فَتَحْتِ", "فَتَحْتُمَا", "فَتَحْتُنَّ", "فَتَحْتُ", "فَتَحْنَا" ]
+ // for khaafa  خَافَ  خاف خِفْ 
+ seghas = [null, "خَافَ", "خَافَا", "خَافُوْا", "خَافَتْ", "خَافَتَا", "خِفْنَ", "خِفْتَ", "خِفْتُمَا", "خِفْتُمْ", "خِفْتِ", "خِفْتُمَا", "خِفْتُنَّ", "خِفْتُ", "خِفْنَا" ]
+
+ // for khaafa muDari'
+ seghas = [null, "يَخافُ", "يَخافانِ", "يَخافُوْنَ", "تَخافُ", "تَخافانِ", "يَخَفْنَ", "تَخافُ", "تَخافانِ", "تَخافُوْنَ", "تَخافِيْنَ", "تَخافانِ", "تَخَفْنَ", "أخافُ", "نَخافُ" ]
 
 var arabicNames = [ null, "الغَائِبُ", "الْغَائِبَانِ", "الْغَائِبُوْنَ", "الْغَائِبَةُ", "الْغَائِبَتَانِ", "الْغَائِبَاتُ", "الْمُخَاطَبُ", "الْمُخَاطَبَانِ", "الْمُخَاطَبُوْنَ", "الْمُخَاطَبَةُ", "الْمُخَاطَبَتَانِ", "الْمُخَاطَبَاتُ", "الْمُتَكَلِّمُ", "الْمُتَكَلِّمُوْنَ" ];
 
@@ -377,6 +384,9 @@ var app = new Vue({
         console.log(['timer_get', time])
         this.timer_get = time;
       });
+
+      this.reset();
+      this.pick();
     },
     methods: {
         timer_get: function(time){
