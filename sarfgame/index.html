@@ -105,6 +105,9 @@
 
 <div id=app>
 <main>
+<input type="button" value="Restart Game" onclick="window.location.reload()" xyz="reset() || pick()"> 
+
+<div v-if="!gameOver">
 <!-- {{ header }} -->
 
 
@@ -134,8 +137,10 @@
     </article>
   </section> -->
 
-<input type="button" value="Start Game" @click="reset() || pick()"> 
-<i> Question {{ (questions.length -1) * 2 - questionsPool.length }} of {{ 2 * (questions.length - 1) }} </i>
+<!-- <input type="button" value="Restart Game" @click="reset() || pick()">  -->
+<!-- <i> Question {{ (questions.length -1) * 2 - questionsPool.length }} of {{ 2 * (questions.length - 1) }} </i> -->
+<i> Question {{ (questions.length -1) * 1 - questionsPool.length }} of {{ 1 * (questions.length - 1) }} </i>
+
 
 <section>
     <article>TIMER: &nbsp;
@@ -265,8 +270,20 @@ leave-active-class="animate__animated animate__fadeOutUp animate__delay-2s"
 </transition>
 
 
-</main>
 </div>
+
+<div v-if="gameOver">
+  <H2>Sarf Game over !</H2>
+  <H2> You achieved an accuracy score of {{ gameAccuracyScore }} % in {{ gameOverTime  }} minutes...</H2>
+  <H3> by answering {{ score }} of {{ scoreOutOf }} questions correctly. </H3>
+  <H3 v-if="gameAccuracyScore < 80">Practice, practice, practice. </H3>
+  <H3 v-if="gameAccuracyScore >= 80">Congratulations !</H3>
+</div>
+<BR>
+<!-- <input type="button" value="Restart Game" @click="reset() || pick()">  -->
+
+</div>
+</main>
 
 
 <!-- development version, includes helpful console warnings -->
@@ -378,6 +395,8 @@ var app = new Vue({
         questionsPool: [],
         animate__animated: 'animate__animated', animate__headShake: 'animate__headShake', animate__heartBeat: 'animate__heartBeat', animate__infinite: 'animate__infinite',
         timer_get: null,
+        gameOver: 0,
+        gameOverTime: null,
     },
     mounted: function(){
       this.bus.$on('timer_get', (time) => {
@@ -395,7 +414,7 @@ var app = new Vue({
         },
         pick: function(){
             var items = this.questions; // later switch these btw 4 modes.
-            this.questionsPool = Array.from( items.slice(1) ).concat( items.slice(1) );
+            this.questionsPool = Array.from( items.slice(1) )  /// .concat( items.slice(1) );
             this.pickContinue();
         },
         pickContinue: function(){
@@ -417,6 +436,7 @@ var app = new Vue({
           this.resultMessage = null;
           this.attempts = [];
           this.questionsPool = [];
+          this.gameOver = 0; this.gameOverTime = null; this.score = this.scoreOutOf = 0;
         },
         guessed: function(guess){
             var _this = this;
@@ -435,7 +455,9 @@ var app = new Vue({
               if(_this.resultMessage.indexOf('Correct') !== -1 ){
                 if( _this.questionsPool.length == 0 ){
                   _this.bus.$emit('stop');
-                  alert('Game over. Completed in: ' + _this.timer_get ); 
+                  _this.gameOver = 1;
+                  _this.gameOverTime = _this.timer_get;
+                  /// alert('Game over. Completed in: ' + _this.timer_get ); 
                   return;
                 }else{
                   /// _this.reset.bind( _this )();
@@ -452,6 +474,9 @@ var app = new Vue({
         },
     },
     computed: {
+        gameAccuracyScore: function(){
+            return Math.round( this.score /  this.scoreOutOf *100 );
+        },
         randomSegha: function(){
             var items = this.questions; // later switch these btw 4 modes.
             return items[ this.randomPickNumber ];
